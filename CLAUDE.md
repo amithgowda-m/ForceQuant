@@ -70,13 +70,13 @@ CloudMetrics must reproduce exactly (tests/test_cloudmetrics.py):
 
 ### Labelling (LLM-assisted, human-verified)
 - Claude Code labels a stratified sample of ~200 paragraphs (spread evenly across companies and items) following LABEL_GUIDE.md. Do this yourself in-session by reading the paragraphs in batches of ~25 and writing the labels to `data/processed/llm_labels.csv` (columns: para_id, ticker, text, llm_label). Do NOT call any external API for labelling.
-- Then export `data/processed/human_check_sheet.csv`: 40 random paragraphs from that sample with an empty `human_label` column and NO llm_label column (so the human is not biased). Then STOP and wait for the human.
-- After the human returns it, compute per-force agreement between `human_label` and `llm_label` (percent agreement and Cohen's kappa) into `outputs/label_agreement.csv`. Flag any force with agreement under 70% or fewer than 8 positives as unreliable.
+- Then export `data/processed/human_check_sheet.csv`: 60 paragraphs = 6 distinct llm-positive paragraphs per force (fewer if a force has fewer positives; both sample types) + 24 llm-None paragraphs from the random sample (to test for missed positives), shuffled. Columns `para_id`, `text`, empty `human_label` only: NO llm_label or sample_type column (so the human is not biased). Then STOP and wait for the human.
+- After the human returns it, compute per-force agreement between `human_label` and `llm_label` (percent agreement and Cohen's kappa) into `outputs/label_agreement.csv`. Flag any force with agreement under 70% or fewer than 8 positives as unreliable. For this rule, Positives = check-sheet paragraphs where llm_label OR human_label includes the force; also report LLM-positive and human-positive counts separately.
 
 ### Tagger and evaluation
 - Baseline (zero-shot): cosine similarity to hand-written prototype sentences in config.yaml, with a threshold.
 - Main model: One-vs-Rest LogisticRegression (class_weight balanced) on MiniLM embeddings, trained on `llm_label` paragraphs with a stratified 80/20 split (seed 42).
-- Report precision/recall/F1 per force on the held-out 20% against `llm_label`, for both baseline and main model, in `outputs/classifier_report.csv`. State in the file header that the reference labels are LLM labels, verified on a 40-paragraph human sample.
+- Report precision/recall/F1 per force on the held-out 20% against `llm_label`, for both baseline and main model, in `outputs/classifier_report.csv`. State in the file header that the reference labels are LLM labels, verified on a 60-paragraph human sample.
 - Apply the main model to ALL paragraphs. Report force share per company, and keep the top evidence paragraph (highest probability) per force per company.
 - KPI regex (Item 7): match variants such as "net dollar retention", "net retention", "net dollar expansion rate", "net expansion rate", "ARR", "customers". Not found => `Not Disclosed`. Keep the matched sentence as evidence.
 

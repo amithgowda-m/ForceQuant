@@ -23,12 +23,17 @@ def test_stratified_sample_is_reproducible_and_capped():
     assert s1.groupby(["ticker", "item"]).size().tolist() == [5, 5, 5, 5]
 
 
-def test_check_sheet_columns_and_force_coverage():
-    labels = pd.DataFrame({"para_id": [f"p{i}" for i in range(80)], "ticker": "A", "text": "t",
-                           "llm_label": ["Buyer_Power"] * 10 + ["Complementors;Buyer_Power"] * 3 + ["None"] * 67})
-    sheet = lb.check_sheet(labels, FORCES, 40, 6, 42)
+def test_check_sheet_composition():
+    lab = ["Buyer_Power"] * 10 + ["Complementors;Buyer_Power"] * 3 + ["Competitive_Rivalry"] * 8 + ["None"] * 59
+    labels = pd.DataFrame({"para_id": [f"p{i}" for i in range(80)], "ticker": "A", "text": "t", "llm_label": lab,
+                           "sample_type": ["enriched"] * 30 + ["random"] * 50})
+    sheet = lb.check_sheet(labels, FORCES, 6, 24, 42)
     assert list(sheet.columns) == ["para_id", "text", "human_label"]
-    assert len(sheet) == 40 and sheet.para_id.is_unique and (sheet.human_label == "").all()
-    lab = labels.set_index("para_id").loc[sheet.para_id, "llm_label"]
-    assert lab.str.contains("Complementors").sum() == 3          # all available (< 6)
-    assert lab.str.contains("Buyer_Power").sum() >= 6
+    assert sheet.para_id.is_unique and (sheet.human_label == "").all()
+    got = labels.set_index("para_id").loc[sheet.para_id]
+    is_none = got.llm_label == "None"
+    assert is_none.sum() == 24 and (got[is_none].sample_type == "random").all()
+    assert got.llm_label.str.contains("Complementors").sum() == 3          # short force: all 3
+    assert got.llm_label.str.contains("Competitive_Rivalry").sum() == 6
+    assert len(sheet) == 24 + 6 + 6 + 3                                      # Rivalry, Buyer, Complementors
+    assert sheet.para_id.tolist() != sorted(sheet.para_id.tolist())          # shuffled

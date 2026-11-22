@@ -27,8 +27,6 @@ from src.utils import load_config, root_path, write_issues
 
 STAGE = "stage5"
 PER_CELL = 20
-CHECK_N = 40
-PER_FORCE_IN_CHECK = 6
 
 
 def unique_paragraphs(paragraphs: pd.DataFrame) -> pd.DataFrame:
@@ -89,20 +87,23 @@ def label_counts(labels: pd.DataFrame, forces: list[str], by: str) -> pd.DataFra
     return pd.DataFrame(rows)
 
 
-def check_sheet(labels: pd.DataFrame, forces: list[str], n: int, per_force: int, seed: int) -> pd.DataFrame:
-    """Up to `per_force` llm-positives per force (where available), then random fill to n.
+def check_sheet(labels: pd.DataFrame, forces: list[str], per_force: int, n_none: int, seed: int) -> pd.DataFrame:
+    """`per_force` distinct llm-positive rows per force (both sample types; fewer if a force is short),
+    plus `n_none` llm-None rows from the random sample (to test for missed positives). Shuffled.
 
-    Draws from all rows (both sample types); output has no llm_label / sample_type columns.
+    Output columns: para_id, text, human_label (empty). No llm_label / sample_type.
     """
     chosen: list[str] = []
-    for i, f in enumerate(forces):
-        pos = labels[has_force(labels.llm_label, f)]
-        need = max(0, per_force - pos.para_id.isin(chosen).sum())
-        pool = pos[~pos.para_id.isin(chosen)]
-        chosen += pool.sample(n=min(need, len(pool)), random_state=seed + i).para_id.tolist()
-    rest = labels[~labels.para_id.isin(chosen)]
-    chosen += rest.sample(n=max(0, n - len(chosen)), random_state=seed).para_id.tolist()
-    sheet = labels[labels.para_id.isin(chosen[:n])][["para_id", "text"]]
+    # scarcest force first, so multi-label rows are not used up by a more common force
+    order = sorted(forces, key=lambda f: (int(has_force(labels.llm_label, f).sum()), forces.index(f)))
+    for f in order:
+        i = forces.index(f)
+        pool = labels[has_force(labels.llm_label, f) & ~labels.para_id.isin(chosen)]
+        chosen += pool.sample(n=min(per_force, len(pool)), random_state=seed + i).para_id.tolist()
+    none_pool = labels[(labels.llm_label.map(lambda s: not split_labels(s)))
+                       & (labels.sample_type == "random") & ~labels.para_id.isin(chosen)]
+    chosen += none_pool.sample(n=min(n_none, len(none_pool)), random_state=seed).para_id.tolist()
+    sheet = labels[labels.para_id.isin(chosen)][["para_id", "text"]]
     sheet = sheet.sample(frac=1, random_state=seed).reset_index(drop=True)  # no force grouping
     sheet["human_label"] = ""
     return sheet
@@ -154,8 +155,17 @@ def main(cmd: str) -> None:
         print(f"\nWrote data/processed/llm_labels.csv ({len(m)} rows; {len(issues)} relabel(s) logged)")
     elif cmd == "checksheet":
         lab = read("llm_labels.csv")
-        sheet = check_sheet(lab, forces, CHECK_N, PER_FORCE_IN_CHECK, seed)
+        lc = cfg["labelling"]
+        sheet = check_sheet(lab, forces, lc["check_positives_per_force"], lc["check_none"], seed)
         sheet.to_csv(proc / "human_check_sheet.csv", index=False)
+        if len(sheet) != lc["human_check_size"]:
+            print(f"NOTE: sheet has {len(sheet)} rows, config human_check_size = {lc['human_check_size']}")
+        # composition report (uses llm_label; never written to the sheet)
+        s = lab[lab.para_id.isin(sheet.para_id)]
+        comp = {f: int(has_force(s.llm_label, f).sum()) for f in forces}
+        comp["None"] = int(s.llm_label.map(lambda x: not split_labels(x)).sum())
+        print("llm_label composition of sheet:", comp)
+        print("sample_type composition:", s.sample_type.value_counts().to_dict())
         print(f"Wrote data/processed/human_check_sheet.csv ({len(sheet)} rows)")
     else:
         raise SystemExit(__doc__)

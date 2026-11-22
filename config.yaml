@@ -61,7 +61,9 @@ labelling:
   label_guide: "LABEL_GUIDE.md"
   sample_size: 200                  # stratified across companies and items
   batch_size: 25
-  human_check_size: 40
+  human_check_size: 60             # = 6 forces x check_positives_per_force + check_none
+  check_positives_per_force: 6     # distinct llm-positive rows per force (fewer if a force is short)
+  check_none: 24                   # llm_label None rows, random sample only (tests for missed positives)
   min_agreement: 0.70               # force flagged unreliable below this...
   min_positives: 8                  # ...or with fewer positives than this
   # Enriched sample (added because the 200-row random sample had < 15 positives per force).

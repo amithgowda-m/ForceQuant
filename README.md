@@ -10,7 +10,7 @@ equations only. Run instructions, full method and limitations are added in Stage
 
 ## Labelling sample (Stage 5)
 Labels in `data/processed/llm_labels.csv` are **LLM labels (`llm_label`)** written by Claude Code in-session
-following `LABEL_GUIDE.md`; a 40-paragraph sheet is checked by a human (`human_label`). Each row has `sample_type`:
+following `LABEL_GUIDE.md`; a 60-paragraph sheet is checked by a human (`human_label`). Each row has `sample_type`:
 
 - **random** (200 rows): 20 unique paragraphs (by `para_hash`) per company x item (Item 1A, Item 7), seed 42.
 - **enriched** (163 rows): added because the random sample had fewer than 15 positives for every force.
@@ -32,5 +32,15 @@ following `LABEL_GUIDE.md`; a 40-paragraph sheet is checked by a human (`human_l
 
 Only 13 Item 1A paragraphs outside the random sample matched the Threat_of_New_Entry keywords; MDB had no
 Supplier_Power keyword matches (other companies topped it up).
+
+Human check sheet (`data/processed/human_check_sheet.csv`, 60 rows): for each force, 6 distinct llm-positive
+paragraphs drawn from both sample types (forces filled scarcest-first so multi-label rows are not used up), plus
+24 llm-None paragraphs from the random sample to test for missed positives; shuffled, seed 42. The sheet holds only
+`para_id`, `text` and an empty `human_label`. Because of multi-label rows, llm-positives per force in the sheet are:
+Rivalry 18, New Entry 8, Substitutes 8, Buyer 9, Supplier 6, Complementors 8 (33 random rows, 27 enriched).
+
+**Complementors is the least reliable force.** It is rarely discussed in the 10-Ks: 6 positives in the 200 random
+rows and 13 in total; the enrichment keywords found only 4 true Complementors paragraphs out of 30 selected
+(most hits were cybersecurity, acquisition-integration or ecosystem-investment text), and no further top-up was made.
 
 Relabelling after review: `data/processed/llm_relabels.csv` (old -> new label with reason; also in `outputs/issues.log`).
