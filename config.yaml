@@ -64,6 +64,22 @@ labelling:
   human_check_size: 40
   min_agreement: 0.70               # force flagged unreliable below this...
   min_positives: 8                  # ...or with fewer positives than this
+  # Enriched sample (added because the 200-row random sample had < 15 positives per force).
+  # Item 1A only; unique texts not already sampled; per force, up to per_ticker paragraphs per
+  # company whose text matches the force's keyword regex (case-insensitive), topped up from
+  # other companies to per_force. Keywords only SELECT candidates; labels follow LABEL_GUIDE.md.
+  # Rows are flagged sample_type=enriched (selection bias disclosed in README).
+  enrichment:
+    item: "1A"
+    per_force: 30
+    per_ticker: 6
+    keywords:
+      Competitive_Rivalry: 'intense(ly)? compet|highly competitive|competitors (offer|may|could|have|with)|price competition|pricing pressure|bundl|market share'
+      Threat_of_New_Entry: 'new entrants?|barriers? to entry|emerging (companies|competitors)|start-?ups?|new competitors|enter (our|the|these) markets?'
+      Threat_of_Substitutes: 'open[- ]source|in-house|build their own|develop their own|managed services?|alternative technolog|substitut'
+      Buyer_Power: 'price concessions|discounts?|negotiat|switching costs?|switch to|large customers|concentration of|limited number of customers|delay(ed|ing)? (their )?purchas'
+      Supplier_Power: 'third-party data cent|rely on third part|limited number of (suppliers|vendors)|sole[- ]source|single[- ]source|suppliers?|foundr|cloud (hosting|infrastructure) providers?|Amazon Web Services'
+      Complementors: 'ecosystem|partner network|integrators?|integrations?|marketplace|third-party (developers|applications|apps)|resellers|channel partners'
 
 # ---------------------------------------------------------------------------
 # Zero-shot baseline: prototype sentences (written by the team)

@@ -25,6 +25,8 @@ Sample ~200 paragraphs from paragraphs.csv, stratified across companies and item
 ## Stage 6: agreement, train, evaluate
 After I return the filled sheet: compute per-force agreement between human_label and llm_label (percent and Cohen's kappa) into outputs/label_agreement.csv and flag unreliable forces. Then run the zero-shot prototype baseline and the MiniLM + OvR logistic regression model (80/20 stratified split, seed 42) on llm_label, and write outputs/classifier_report.csv for both. Apply the main model to all paragraphs, save force shares per company and the top evidence paragraph per force per company. Commit.
 
+Stage 6 additions (agreed after Stage 5): report precision/recall/F1 twice, on held-out random rows only and on all held-out rows (enriched rows inflate the all-rows number); group the split by para_hash; set the decision threshold on random-sample rows, not enriched ones; show predicted share next to llm_label share on the random rows before using model shares in Stage 7.
+
 ## Stage 7: scoring and figures
 Implement src/scoring.py (S_i and MAS exactly as in CLAUDE.md, with parts_used) and src/figures.py (4 figures at 300 DPI). Write outputs/forces_summary.csv with the top evidence quote and filing URL per force. Print the assumptions (anchors) used. Commit.
 

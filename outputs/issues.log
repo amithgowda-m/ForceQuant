@@ -155,3 +155,5 @@
 [stage4][NVDA FY2025] LTV_CAC = n/a: inputs not disclosed in Item 7: ARPU, new-customer count, churn
 [stage4][NVDA FY2026] NDR = Not Disclosed: no net retention/expansion rate in Item 7
 [stage4][NVDA FY2026] LTV_CAC = n/a: inputs not disclosed in Item 7: ARPU, new-customer count, churn
+[stage5][relabel] NVDA_FY2025_1A_0095: None -> Competitive_Rivalry;Threat_of_New_Entry (Sanity check: first pass applied a non-guide 'mainly regulatory -> None' rule; text describes customers buying from competitors and export controls increasing investment in foreign competitors (guide: regulation changing entry))
+[stage5][relabel] ESTC_FY2026_1A_0083: None -> Threat_of_Substitutes (Sanity check: first pass read it as reputational; text says third-party implementations of ESTC's open-source software cause lost sales (guide: open-source alternatives))

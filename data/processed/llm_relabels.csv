@@ -1,0 +1,3 @@
+para_id,old_llm_label,new_llm_label,reason
+NVDA_FY2025_1A_0095,None,Competitive_Rivalry;Threat_of_New_Entry,"Sanity check: first pass applied a non-guide 'mainly regulatory -> None' rule; text describes customers buying from competitors and export controls increasing investment in foreign competitors (guide: regulation changing entry)"
+ESTC_FY2026_1A_0083,None,Threat_of_Substitutes,"Sanity check: first pass read it as reputational; text says third-party implementations of ESTC's open-source software cause lost sales (guide: open-source alternatives)"
