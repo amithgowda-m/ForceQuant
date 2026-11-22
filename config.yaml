@@ -162,6 +162,22 @@ scoring:
   nlp_only: [Supplier_Power, Complementors]
 
 # ---------------------------------------------------------------------------
+# Financials (SEC companyfacts XBRL)
+# ---------------------------------------------------------------------------
+financials:
+  companyfacts_url: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json"
+  n_years: 5                        # latest N fiscal years per company in outputs
+  annual_days: [350, 380]           # duration window that counts as a fiscal year
+  # Fallback tag lists, tried in order per fiscal year; tag used -> source_notes.
+  tags:
+    Revenue: [Revenues, RevenueFromContractWithCustomerExcludingAssessedTax, SalesRevenueNet, RevenueFromContractWithCustomerIncludingAssessedTax]
+    COGS: [CostOfRevenue, CostOfGoodsAndServicesSold]
+    RD: [ResearchAndDevelopmentExpense]
+    SM: [SellingAndMarketingExpense]
+    GA: [GeneralAndAdministrativeExpense]
+    OpInc: [OperatingIncomeLoss]
+
+# ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
 paths:

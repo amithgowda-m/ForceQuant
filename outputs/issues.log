@@ -1,1 +1,76 @@
 [stage1][cloudmetrics] Break-even price cut: CLAUDE.md target 3,392.3 = round(NPV)/PVAF = 10,753 / 3.169865. Unrounded NPV (-10,753.364) gives 3,392.37 (3,392.4 at 1 dp). Both are asserted in tests/test_cloudmetrics.py; quote 3,392.4 unless the team prefers the rounded-NPV convention.
+[stage2][ZM] CIK 0001585521 resolved from company_tickers.json
+[stage2][ZM FY2022] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ZM FY2022] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ZM FY2023] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ZM FY2023] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ZM FY2024] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ZM FY2024] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ZM FY2025] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ZM FY2025] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ZM FY2026] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ZM FY2026] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MSFT] CIK 0000789019 resolved from company_tickers.json
+[stage2][MSFT FY2022] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MSFT FY2022] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MSFT FY2023] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MSFT FY2023] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MSFT FY2024] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MSFT FY2024] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MSFT FY2025] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MSFT FY2025] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MSFT FY2026] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MSFT FY2026] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MDB] CIK 0001441816 resolved from company_tickers.json
+[stage2][MDB FY2022] DOL = n/m: OperatingIncome <= 0 (-289364000)
+[stage2][MDB FY2022] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MDB FY2022] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MDB FY2023] DOL = n/m: OperatingIncome <= 0 (-346655000)
+[stage2][MDB FY2023] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MDB FY2023] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MDB FY2024] DOL = n/m: OperatingIncome <= 0 (-233732000)
+[stage2][MDB FY2024] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MDB FY2024] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MDB FY2025] DOL = n/m: OperatingIncome <= 0 (-216064000)
+[stage2][MDB FY2025] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MDB FY2025] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][MDB FY2026] DOL = n/m: OperatingIncome <= 0 (-136968000)
+[stage2][MDB FY2026] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][MDB FY2026] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ESTC] CIK 0001707753 resolved from company_tickers.json
+[stage2][ESTC FY2022] DOL = n/m: OperatingIncome <= 0 (-173680000)
+[stage2][ESTC FY2022] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ESTC FY2022] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ESTC FY2023] DOL = n/m: OperatingIncome <= 0 (-219172000)
+[stage2][ESTC FY2023] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ESTC FY2023] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ESTC FY2024] DOL = n/m: OperatingIncome <= 0 (-129902000)
+[stage2][ESTC FY2024] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ESTC FY2024] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ESTC FY2025] DOL = n/m: OperatingIncome <= 0 (-54922000)
+[stage2][ESTC FY2025] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ESTC FY2025] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][ESTC FY2026] DOL = n/m: OperatingIncome <= 0 (-33476000)
+[stage2][ESTC FY2026] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][ESTC FY2026] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][NVDA] CIK 0001045810 resolved from company_tickers.json
+[stage2][NVDA FY2022] S&M = n/a: no 10-K FY value for tags [SellingAndMarketingExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2022] G&A = n/a: no 10-K FY value for tags [GeneralAndAdministrativeExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2022] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][NVDA FY2022] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][NVDA FY2023] S&M = n/a: no 10-K FY value for tags [SellingAndMarketingExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2023] G&A = n/a: no 10-K FY value for tags [GeneralAndAdministrativeExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2023] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][NVDA FY2023] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][NVDA FY2024] S&M = n/a: no 10-K FY value for tags [SellingAndMarketingExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2024] G&A = n/a: no 10-K FY value for tags [GeneralAndAdministrativeExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2024] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][NVDA FY2024] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][NVDA FY2025] S&M = n/a: no 10-K FY value for tags [SellingAndMarketingExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2025] G&A = n/a: no 10-K FY value for tags [GeneralAndAdministrativeExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2025] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][NVDA FY2025] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
+[stage2][NVDA FY2026] S&M = n/a: no 10-K FY value for tags [SellingAndMarketingExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2026] G&A = n/a: no 10-K FY value for tags [GeneralAndAdministrativeExpense] (only SG&A reported; not split, left n/a)
+[stage2][NVDA FY2026] LTV_CAC = n/a: churn and new-customer counts are not XBRL facts in companyfacts
+[stage2][NVDA FY2026] NDR = n/a: not an XBRL fact; text KPI from Item 7 is extracted in Stage 4
