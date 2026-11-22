@@ -14,6 +14,7 @@ Usage:  python -m src.fetch_filings [--refresh]
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import unicodedata
@@ -148,6 +149,11 @@ def find_section(lines: list[str], item: str) -> dict:
     return best
 
 
+def para_hash(text: str) -> str:
+    """sha256 (first 16 hex) of lowercased, whitespace-normalised text."""
+    return hashlib.sha256(" ".join(text.lower().split()).encode("utf-8")).hexdigest()[:16]
+
+
 def split_paragraphs(lines: list[str], min_words: int) -> list[str]:
     """Drop page noise, re-join lines broken by page breaks, keep paragraphs >= min_words."""
     body = [l for l in lines if not _PAGE_NOISE.match(l)]
@@ -227,7 +233,7 @@ def main(refresh: bool = False) -> pd.DataFrame:
                 for k, text in enumerate(sec["paragraphs"], 1):
                     paras.append({"para_id": f"{t}_{fy_label}_{item}_{k:04d}", "ticker": t,
                                   "fiscal_year": fy_label, "item": item, "para_idx": k,
-                                  "n_words": len(text.split()), "text": text,
+                                  "n_words": len(text.split()), "para_hash": para_hash(text), "text": text,
                                   "accession": fl["accession"], "filing_url": fl["filing_url"]})
             print(f"  {fy_label} {fl['accession']}: " + ", ".join(
                 f"Item {i}={res['sections'][i]['status']}/{len(res['sections'][i].get('paragraphs', []))}p" for i in items))

@@ -61,3 +61,8 @@ def test_select_10ks_latest_originals_only():
     got = fl.select_10ks({"filings": {"recent": recent}}, "0000000123", 3)
     assert [g["accession"] for g in got] == ["a-5", "a-4", "a-3"]
     assert got[0]["filing_url"] == "https://www.sec.gov/Archives/edgar/data/123/a5/d5.htm"
+
+
+def test_para_hash_normalises_case_and_space():
+    assert fl.para_hash("Intense  Competition\n now.") == fl.para_hash("intense competition now.")
+    assert fl.para_hash("a b") != fl.para_hash("a c")
