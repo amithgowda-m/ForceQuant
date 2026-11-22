@@ -1,0 +1,173 @@
+# ForceQuant configuration
+# Porter's Five Forces (+ Complementors) for software companies, dual-track pipeline.
+# Modelling choices are marked SOURCED (taken from a cited reference) or
+# JUDGEMENT (team choice). Outputs print these so the team can state them in the chapter.
+
+# ---------------------------------------------------------------------------
+# SEC access (used ONLY by src/fetch_*.py)
+# ---------------------------------------------------------------------------
+# SEC blocks anonymous requests. Replace both bracketed parts with a real name
+# and contact email. Fetch scripts must refuse to run while the value still
+# contains "[" or "]" or has no "@".
+sec_user_agent: "ForceQuant-RVCE [YOUR NAME] [YOUR EMAIL]"
+sec_request_sleep_s: 0.2            # keeps us under SEC's 10 requests/second
+sec_company_tickers_url: "https://www.sec.gov/files/company_tickers.json"
+# CIKs are resolved at fetch time from the URL above, never hard-coded.
+
+# ---------------------------------------------------------------------------
+# Reproducibility
+# ---------------------------------------------------------------------------
+random_seed: 42
+
+# ---------------------------------------------------------------------------
+# Companies and cases
+# fiscal_year_end is informational only; outputs use the fiscal-year label
+# reported in each filing.
+# ---------------------------------------------------------------------------
+companies:
+  - {ticker: ZM,   case: 1, case_name: "Collaboration suites",  fiscal_year_end: "Jan"}
+  - {ticker: MSFT, case: 1, case_name: "Collaboration suites",  fiscal_year_end: "Jun"}
+  - {ticker: MDB,  case: 2, case_name: "Database licensing",    fiscal_year_end: "Jan"}
+  - {ticker: ESTC, case: 2, case_name: "Database licensing",    fiscal_year_end: "Apr"}
+  - {ticker: NVDA, case: 3, case_name: "AI compute supplier",   fiscal_year_end: "Jan"}
+# Case 4 (CloudMetrics) is hypothetical: computed from equations only (tests/test_cloudmetrics.py).
+
+# ---------------------------------------------------------------------------
+# Filings / text track
+# ---------------------------------------------------------------------------
+filings:
+  form: "10-K"
+  n_years: 3                        # latest 10-K plus up to two previous
+  items: ["1A", "7"]                # Risk Factors, MD&A
+  min_paragraph_words: 25
+
+forces:
+  - Competitive_Rivalry
+  - Threat_of_New_Entry
+  - Threat_of_Substitutes
+  - Buyer_Power
+  - Supplier_Power
+  - Complementors
+
+nlp:
+  embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+  normalize_embeddings: true
+  device: "cpu"
+  test_size: 0.2                    # stratified 80/20 split
+  lr_class_weight: "balanced"
+
+labelling:
+  label_guide: "LABEL_GUIDE.md"
+  sample_size: 200                  # stratified across companies and items
+  batch_size: 25
+  human_check_size: 40
+  min_agreement: 0.70               # force flagged unreliable below this...
+  min_positives: 8                  # ...or with fewer positives than this
+
+# ---------------------------------------------------------------------------
+# Zero-shot baseline: prototype sentences (written by the team)
+# A paragraph gets a force if its cosine similarity to any prototype of that
+# force >= threshold.
+# ---------------------------------------------------------------------------
+baseline:
+  # PLACEHOLDER. Final value is chosen by cross-validation on the TRAINING split
+  # only, never on the test split or the human check sheet.
+  similarity_threshold: 0.40
+  threshold_selection: "cv_on_train_split"
+  prototypes:
+    Competitive_Rivalry:
+      - "We compete with larger vendors that offer similar products and may cut prices to win customers."
+      - "Competitors bundle comparable features into their existing suites at no extra charge."
+      - "Intense competition could force us to lower prices and reduce our market share."
+      - "Rivals are releasing new features faster than we are, which pressures our growth."
+    Threat_of_New_Entry:
+      - "New companies can enter our market quickly because the barriers to entry are low."
+      - "Start-ups with new technology may attract our customers with little upfront investment."
+      - "Advances in open models and tools reduce the cost for new competitors to build products."
+    Threat_of_Substitutes:
+      - "Customers may use open-source software or build their own tools instead of buying ours."
+      - "Cloud providers offer managed services that can replace our product."
+      - "Alternative technologies could make our offering less necessary."
+    Buyer_Power:
+      - "Large customers negotiate lower prices and more favorable contract terms."
+      - "Customers can switch to other providers with little cost or effort."
+      - "A small number of customers account for a significant part of our revenue and can demand discounts."
+    Supplier_Power:
+      - "We depend on a limited number of third parties for cloud hosting and computing capacity."
+      - "Rising infrastructure or hardware costs from our suppliers could reduce our gross margin."
+      - "A supplier could change its pricing or terms, or limit supply, in ways that harm our business."
+    Complementors:
+      - "Our platform's value depends on third-party developers, partners and integrators."
+      - "Customers rely on applications and integrations built by partners on our ecosystem."
+      - "If partners stop building on our platform, our product becomes less attractive."
+
+# ---------------------------------------------------------------------------
+# Scoring anchors
+# S_i in [1, 10]: 1 = weak threat, 10 = strong threat.
+# Each part maps a raw value linearly between two fixed anchors and clips to
+# [1, 10]. Anchors are fixed (NOT min-max over the 5 firms).
+#   value_at_1  -> score 1  (weak threat)
+#   value_at_10 -> score 10 (strong threat)
+# basis_at_1 / basis_at_10: SOURCED or JUDGEMENT; note gives the reason/source.
+# S_i = mean of the parts that exist; parts_used recorded per cell.
+# ---------------------------------------------------------------------------
+scoring:
+  weights:                          # JUDGEMENT: equal weights 1/6, must sum to 1
+    Competitive_Rivalry: 0.16666666666666666
+    Threat_of_New_Entry: 0.16666666666666666
+    Threat_of_Substitutes: 0.16666666666666666
+    Buyer_Power: 0.16666666666666666
+    Supplier_Power: 0.16666666666666666
+    Complementors: 0.16666666666666666
+
+  anchors:
+    # NLP salience part (all forces): share of a company's paragraphs tagged
+    # with the force.
+    mention_share:
+      value_at_1: 0.00              # JUDGEMENT: never mentioned
+      value_at_10: 0.33             # JUDGEMENT: about twice the equal share
+      basis_at_1: JUDGEMENT
+      basis_at_10: JUDGEMENT
+      note: "1/6 = 0.167 is the equal share across six forces; 0.33 is about twice the equal share."
+
+    # Financial part, Buyer_Power: gross margin (Revenue - COGS) / Revenue.
+    gross_margin:
+      value_at_1: 0.72              # SOURCED: Software (System & Application) 71.7%
+      value_at_10: 0.38             # SOURCED: all-market 37.8%
+      basis_at_1: SOURCED
+      basis_at_10: SOURCED
+      note: "Damodaran, NYU Stern, Margins by Sector (US), Jan 2026: Software (System & Application) 71.7%, all-market 37.8%."
+
+    # Financial part, Threat_of_New_Entry: empirical DOL
+    # (Revenue - COGS) / OperatingIncome. "n/m" (OpInc <= 0) -> part skipped.
+    dol:
+      value_at_1: 5.0               # JUDGEMENT: high operating leverage = scale barrier
+      value_at_10: 1.0              # JUDGEMENT: mathematical minimum (no fixed costs)
+      basis_at_1: JUDGEMENT
+      basis_at_10: JUDGEMENT
+      note: "1.0 is the mathematical minimum (no fixed costs); 5.0 is a judgement."
+
+    # Financial part, Competitive_Rivalry and Threat_of_Substitutes:
+    # 3-year trend of Lerner proxy (Revenue - COGS) / Revenue, as OLS slope
+    # in margin (fraction) per fiscal year over the latest 3 fiscal years.
+    lerner_trend:
+      n_years: 3
+      value_at_1: 0.01              # JUDGEMENT: margin rising 1 pt/yr  -> low threat
+      value_at_10: -0.01            # JUDGEMENT: margin falling 1 pt/yr -> high threat
+      basis_at_1: JUDGEMENT
+      basis_at_10: JUDGEMENT
+      note: "Judgement."
+
+  # Forces with no financial metric (NLP part only):
+  nlp_only: [Supplier_Power, Complementors]
+
+# ---------------------------------------------------------------------------
+# Paths
+# ---------------------------------------------------------------------------
+paths:
+  raw: "data/raw"
+  processed: "data/processed"
+  outputs: "outputs"
+  figures: "outputs/figures"
+  issues_log: "outputs/issues.log"
+  figure_dpi: 300
