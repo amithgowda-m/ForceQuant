@@ -6,9 +6,10 @@
 # ---------------------------------------------------------------------------
 # SEC access (used ONLY by src/fetch_*.py)
 # ---------------------------------------------------------------------------
-# SEC blocks anonymous requests. Replace both bracketed parts with a real name
-# and contact email. Fetch scripts must refuse to run while the value still
-# contains "[" or "]" or has no "@".
+# SEC blocks anonymous requests. The real value lives in the environment
+# variable SEC_USER_AGENT (put it in .env, which is git-ignored; see .env.example).
+# This key is only a fallback placeholder. Fetch scripts refuse to run while the
+# resolved value still contains "[" or "]" or has no "@".
 sec_user_agent: "ForceQuant-RVCE [YOUR NAME] [YOUR EMAIL]"
 sec_request_sleep_s: 0.2            # keeps us under SEC's 10 requests/second
 sec_company_tickers_url: "https://www.sec.gov/files/company_tickers.json"

@@ -16,7 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from src import models
-from src.utils import load_config, root_path, write_issues
+from src.utils import load_config, root_path, sec_user_agent, write_issues
 
 STAGE = "stage2"
 N_A = models.N_A
@@ -33,7 +33,7 @@ COL_NAME = {"Revenue": "Revenue", "COGS": "COGS", "RD": "R&D", "SM": "S&M",
 # ---------------------------------------------------------------------------
 def check_user_agent(ua: str) -> None:
     if not ua or "[" in ua or "]" in ua or "@" not in ua or "CHANGE_ME" in ua:
-        raise SystemExit("config.yaml sec_user_agent is still a placeholder; set a real name and email.")
+        raise SystemExit("SEC_USER_AGENT is not set (or is a placeholder). Put a real name and email in .env; see .env.example.")
 
 
 def _get(url: str, cfg: dict) -> bytes:
@@ -189,6 +189,7 @@ def build_metrics(ticker: str, facts: dict, cfg: dict) -> tuple[list[dict], list
 
 def main(refresh: bool = False) -> pd.DataFrame:
     cfg = load_config()
+    cfg["sec_user_agent"] = sec_user_agent(cfg)  # env / .env overrides config placeholder
     check_user_agent(cfg["sec_user_agent"])
     tickers = [c["ticker"] for c in cfg["companies"]]
 

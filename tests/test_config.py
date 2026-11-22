@@ -58,3 +58,17 @@ def test_prototypes_filled(config):
 def test_label_guide_exists(config):
     from pathlib import Path
     assert (Path(__file__).resolve().parents[1] / config["labelling"]["label_guide"]).is_file()
+
+
+def test_sec_user_agent_from_env(config, tmp_path, monkeypatch):
+    from src.utils import sec_user_agent
+    monkeypatch.delenv("SEC_USER_AGENT", raising=False)
+    env = tmp_path / ".env"
+    env.write_text('# comment\nSEC_USER_AGENT="Tester tester@example.com"\n', encoding="utf-8")
+    assert sec_user_agent(config, env) == "Tester tester@example.com"
+    monkeypatch.setenv("SEC_USER_AGENT", "Real real@example.com")  # real env var wins
+    assert sec_user_agent(config, env) == "Real real@example.com"
+
+
+def test_config_has_no_real_contact(config):
+    assert "[" in config["sec_user_agent"]  # placeholder only; real value lives in .env
