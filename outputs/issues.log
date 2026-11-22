@@ -1,0 +1,1 @@
+[stage1][cloudmetrics] Break-even price cut: CLAUDE.md target 3,392.3 = round(NPV)/PVAF = 10,753 / 3.169865. Unrounded NPV (-10,753.364) gives 3,392.37 (3,392.4 at 1 dp). Both are asserted in tests/test_cloudmetrics.py; quote 3,392.4 unless the team prefers the rounded-NPV convention.
