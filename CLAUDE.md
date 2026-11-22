@@ -7,7 +7,7 @@ Short README and code comments are fine.
 ## Hard rules
 1. Never invent data. If a value is missing, write `Not Disclosed` (text KPIs) or `n/a` (numeric). Never estimate silently.
 2. Network calls happen ONLY in `src/fetch_*.py`. Everything is cached in `data/raw/`. All other code runs offline.
-3. SEC requires a User-Agent with a real contact. Read it from `config.yaml` (`sec_user_agent`). Stay under 10 requests/second (sleep 0.2s).
+3. SEC requires a User-Agent with a real contact. Read it from the `SEC_USER_AGENT` environment variable or the git-ignored `.env` file (template: `.env.example`). The `config.yaml` `sec_user_agent` value is only a placeholder fallback that makes fetch scripts refuse to run. Never print the user-agent value in logs, issues.log or outputs. Stay under 10 requests/second (sleep 0.2s).
 4. Fixed random seed 42 everywhere. Results must be reproducible.
 5. Every number in the outputs must be traceable: keep source tag / filing URL / accession number columns.
 6. After each stage: run `pytest`, commit with a clear message, and print a short summary of what changed.
