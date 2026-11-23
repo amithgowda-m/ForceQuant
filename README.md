@@ -43,7 +43,30 @@ cp .env.example .env
 # SEC_USER_AGENT=YourName your.email@domain.com
 ```
 
-### 3. Running the Pipeline (Step-by-Step)
+### 3. Interactive Web Application (UI)
+ForceQuant includes a full-featured, zero-configuration local web application to interactively explore the mechanics, data tables, dynamic radar charts, sensitivity sandbox, and Case 4 CloudMetrics simulator:
+
+```bash
+# Launch the web application (starts local server & opens browser automatically)
+python app.py
+
+# Or specify a custom port or headless mode:
+python app.py --port 8080 --no-browser
+```
+
+Key UI Features:
+- **Executive Rankings & MAS**: Visual ranking cards with composite Market Attractiveness Scores.
+- **Porter's Six Forces Radar**: Multi-series interactive SVG radar chart comparing threat profiles ($S_i \in [1, 10]$).
+- **Financial Fundamentals (FY22-26)**: Filterable SEC XBRL audited fundamentals, explaining why DOL is `n/m` for unprofitable firms and NDR is `Not Disclosed` for MSFT/NVDA.
+- **10-K Evidence Explorer**: Filterable 10-K risk factors and MD&A paragraphs with classifier confidence and direct links to official SEC EDGAR filings.
+- **Ground-Truth Check Sheet Inspector**: Real-time Cohen's $\kappa$ statistics and 60-paragraph expert validation viewer.
+- **Interactive Sensitivity Sandbox**: Live sliders for force weights ($w_i$) and anchors that dynamically re-score and re-rank companies in browser memory.
+- **Case 4 CloudMetrics Simulator**: Live microeconomic sliders for SaaS price, variable cost, fixed cost, and switching costs, dynamically rendering break-even quantity and NPV curves.
+- **Capabilities & Limitations Matrix**: Explicit breakdown of analytical boundaries, edge cases, and safeguards.
+
+---
+
+### 4. Running the Pipeline (Step-by-Step CLI)
 
 ```bash
 # Stage 1: Verify mathematical models and CloudMetrics targets
