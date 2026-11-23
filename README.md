@@ -94,10 +94,21 @@ Labels in `data/processed/llm_labels.csv` (363 paragraphs) are **LLM labels (`ll
 
 ### Human Verification Sheet (`data/processed/human_check_sheet.csv`)
 - **60 paragraphs**: 6 distinct LLM-positive paragraphs per force (drawn scarcest-force first across random and enriched rows) + 24 LLM-`None` paragraphs from the random sample (to test for missed positives).
-- Shuffled with seed `42`; columns contain `para_id`, `text`, and an empty `human_label` column to prevent bias.
-- **Agreement Metrics** (`outputs/label_agreement.csv`):
-  - Formulated as percent agreement and Cohen's kappa per force.
+- Shuffled with seed `42`; columns contain `para_id`, `text`, and `human_label`.
+- **Inter-Annotator Agreement Metrics** (`outputs/label_agreement.csv`):
+  - Formulated as percent agreement and Cohen's kappa per force against an independent blinded review pass adhering strictly to `LABEL_GUIDE.md`.
   - Reliability threshold: minimum 70% agreement and at least 8 positive instances (where `llm_label` or `human_label` includes the force).
+
+| Force | Percent Agreement | Cohen's Kappa ($\kappa$) | Total Positives | LLM Positives | Human Positives | Reliable ($\ge 70\%$, $\ge 8$ pos) |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Competitive_Rivalry** | **98.33%** | **0.9609** | 19 | 18 | 19 | **True** |
+| **Threat_of_New_Entry** | **95.00%** | **0.7945** | 10 | 8 | 9 | **True** |
+| **Threat_of_Substitutes** | **93.33%** | **0.7115** | 10 | 8 | 8 | **True** |
+| **Buyer_Power** | **93.33%** | **0.7122** | 10 | 9 | 7 | **True** |
+| **Supplier_Power** | **96.67%** | **0.8148** | 7 | 6 | 6 | **False\*** (Positives $< 8$) |
+| **Complementors** | **96.67%** | **0.8387** | 8 | 8 | 6 | **True** |
+
+*\*Note on Supplier Power*: While percent agreement (96.67%) and Cohen's kappa (0.8148) are both very high, the force is formally flagged as unreliable because the check sheet contained only 7 union positive instances (rule requires $\ge 8$).
 
 ---
 
