@@ -1,0 +1,29 @@
+# Classifier evaluation report
+# Reference labels: LLM labels (llm_label), verified on a 60-paragraph human sample.
+# '*_random_only' rows: held-out 20% of random sample rows.
+# '*_all_heldout' rows: random held-out + all enriched rows (enriched rows inflate numbers).
+Force,Model,Precision,Recall,F1,Positives
+Competitive_Rivalry,baseline_random_only,0.0,0.0,0.0,1
+Threat_of_New_Entry,baseline_random_only,0.0,0.0,0.0,0
+Threat_of_Substitutes,baseline_random_only,0.3333,1.0,0.5,1
+Buyer_Power,baseline_random_only,0.5,1.0,0.6667,1
+Supplier_Power,baseline_random_only,0.1667,0.5,0.25,2
+Complementors,baseline_random_only,0.3333,1.0,0.5,1
+Competitive_Rivalry,LR_random_only,0.3333,1.0,0.5,1
+Threat_of_New_Entry,LR_random_only,0.0,0.0,0.0,0
+Threat_of_Substitutes,LR_random_only,0.5,1.0,0.6667,1
+Buyer_Power,LR_random_only,1.0,1.0,1.0,1
+Supplier_Power,LR_random_only,0.6667,1.0,0.8,2
+Complementors,LR_random_only,0.3333,1.0,0.5,1
+Competitive_Rivalry,baseline_all_heldout,0.6364,0.5676,0.6,37
+Threat_of_New_Entry,baseline_all_heldout,0.4286,0.4,0.4138,15
+Threat_of_Substitutes,baseline_all_heldout,0.375,0.5,0.4286,24
+Buyer_Power,baseline_all_heldout,0.4545,0.3846,0.4167,13
+Supplier_Power,baseline_all_heldout,0.2927,0.7059,0.4138,17
+Complementors,baseline_all_heldout,0.2778,0.625,0.3846,8
+Competitive_Rivalry,LR_all_heldout,0.7872,1.0,0.881,37
+Threat_of_New_Entry,LR_all_heldout,0.4839,1.0,0.6522,15
+Threat_of_Substitutes,LR_all_heldout,0.6154,1.0,0.7619,24
+Buyer_Power,LR_all_heldout,0.7222,1.0,0.8387,13
+Supplier_Power,LR_all_heldout,0.68,1.0,0.8095,17
+Complementors,LR_all_heldout,0.5333,1.0,0.6957,8

@@ -1,0 +1,7 @@
+Force,PercentAgreement,Kappa,Positives,LLM_Positives,Human_Positives,Reliable
+Competitive_Rivalry,0.9833,0.9609,19,18,19,True
+Threat_of_New_Entry,0.95,0.7945,10,8,9,True
+Threat_of_Substitutes,0.9333,0.7115,10,8,8,True
+Buyer_Power,0.9333,0.7122,10,9,7,True
+Supplier_Power,0.9667,0.8148,7,6,6,False
+Complementors,0.9667,0.8387,8,8,6,True
